@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Transfer Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 1em;
+        }
+        input[type="text"], input[type="file"], select {
+            width: 100%;
+            padding: 0.75em;
+            margin: 0.5em 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        button {
+            width: 100%;
+            padding: 0.75em;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .alert {
+            margin-top: 1em;
+            padding: 0.75em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Transfer Client</h1>
+        <input type="text" id="serverIp" placeholder="Enter Server IP">
+        <input type="file" id="fileInput">
+        <select id="protocol">
+            <option value="TCP">TCP</option>
+            <option value="UDP">UDP</option>
+        </select>
+        <button onclick="sendFile()">Send File</button>
+        <div id="message" class="alert" style="display: none;"></div>
+    </div>
+
+    <script>
+        async function sendFile() {
+            const serverIp = document.getElementById('serverIp').value;
+            const fileInput = document.getElementById('fileInput');
+            const protocol = document.getElementById('protocol').value;
+            const messageBox = document.getElementById('message');
+
+            messageBox.style.display = "none"; // Hide message box initially
+
+            if (fileInput.files.length === 0) {
+                displayMessage("Please select a file.", "error");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('protocol', protocol);
+
+            try {
+                const response = await fetch(`http://${serverIp}:12345/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    displayMessage("File transferred successfully.", "success");
+                } else {
+                    displayMessage("File transfer failed.", "error");
+                }
+            } catch (error) {
+                displayMessage("Error: " + error, "error");
+            }
+        }
+
+        function displayMessage(message, type) {
+            const messageBox = document.getElementById('message');
+            messageBox.style.display = "block";
+            messageBox.className = `alert alert-${type}`;
+            messageBox.textContent = message;
+        }
+    </script>
+</body>
+</html>
