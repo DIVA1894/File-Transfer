@@ -3,7 +3,7 @@ import os
 import threading
 
 # Define the host and port
-host = '10.1.34.159'
+host = '192.168.89.6'
 port = 12345
 
 # Create a directory to store received files

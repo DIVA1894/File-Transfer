@@ -1,0 +1,5 @@
+Cr - 10
+Js - 20
+nptel - 30
+ideathon - 10
+ssn - 10

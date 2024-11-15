@@ -4,7 +4,7 @@ import threading
 from tkinter import Tk, Label, Button, Entry, StringVar, Radiobutton, filedialog, messagebox
 
 # Define the host and port
-host = '192.168.98.28'  # Replace this with your server IP
+host = '192.168.89.6'  # Replace this with your server IP
 port = 12345
 
 # Create a directory to store received files (on the server side)
